@@ -7,15 +7,17 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
       margin: 0;
       padding: 0;
-      color: #333;
+      color: #fff;
       text-align: center;
+      background: url('smarteller.jpg') no-repeat center center fixed;
+      background-size: cover;
     }
+
     header {
       position: relative;
-      background: #0077cc;
+      background: rgba(0, 119, 204, 0.8);
       color: white;
       padding: 20px 40px 20px 20px;
       text-align: center;
@@ -23,7 +25,7 @@
       font-weight: bold;
       letter-spacing: 2px;
     }
-    /* Hamburger icon style */
+
     .menu-icon {
       position: absolute;
       top: 22px;
@@ -31,9 +33,8 @@
       font-size: 30px;
       cursor: pointer;
       user-select: none;
-      z-index: 1100;
     }
-    /* Hide menu by default */
+
     .nav-menu {
       display: none;
       position: absolute;
@@ -48,11 +49,11 @@
       text-align: left;
       z-index: 1000;
     }
-    /* Show menu when active */
+
     .nav-menu.active {
       display: block;
     }
-    /* Style menu links */
+
     .nav-menu a {
       display: block;
       padding: 10px 20px;
@@ -61,16 +62,24 @@
       font-weight: 600;
       border-bottom: 1px solid #ddd;
     }
+
     .nav-menu a:last-child {
       border-bottom: none;
     }
+
     .nav-menu a:hover {
       background: #0077cc;
       color: white;
     }
+
     main {
-      padding: 40px 20px;
+      padding: 60px 20px;
+      background-color: rgba(0, 0, 0, 0.5);
+      max-width: 600px;
+      margin: 40px auto;
+      border-radius: 12px;
     }
+
     a.button {
       display: inline-block;
       margin-top: 30px;
@@ -81,6 +90,7 @@
       font-size: 20px;
       border-radius: 8px;
     }
+
     a.button:hover {
       background: #218838;
     }
@@ -89,34 +99,25 @@
 <body>
   <header>
     Welcome to Smarteller
-    <div class="menu-icon" id="menu-icon">&#9776;</div>
-    <nav class="nav-menu" id="nav-menu">
+    <div class="menu-icon" onclick="toggleMenu()">☰</div>
+    <div class="nav-menu" id="navMenu">
       <a href="index.html">Home</a>
-      <a href="buy.html">Buy Now</a>
+      <a href="buy.html">Buy</a>
       <a href="confirm.html">Confirm Payment</a>
-      <a href="referral.html">REFER</a>
-    </nav>
+      <a href="referral.html">Referral</a>
+    </div>
   </header>
+
   <main>
     <h1>Coming Soon: Earn Money Online eBook</h1>
     <p>Buy our guide to start earning online with your phone or PC.</p>
-    <a class="button" href="buy.html">Buy Now – ৳20</a>
+    <a class="button" href="buy.html">Buy Now – ৳10</a>
   </main>
 
   <script>
-    const menuIcon = document.getElementById('menu-icon');
-    const navMenu = document.getElementById('nav-menu');
-
-    menuIcon.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
-    });
-
-    // Optional: close menu if clicked outside
-    document.addEventListener('click', (e) => {
-      if (!menuIcon.contains(e.target) && !navMenu.contains(e.target)) {
-        navMenu.classList.remove('active');
-      }
-    });
+    function toggleMenu() {
+      document.getElementById("navMenu").classList.toggle("active");
+    }
   </script>
 </body>
 </html>
