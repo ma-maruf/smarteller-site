@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Referral Program - Smarteller</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9fafb;
+      margin: 0; padding: 0;
+      color: #333;
+    }
+    header {
+      background-color: #0077cc;
+      color: white;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 24px;
+    }
+    main {
+      max-width: 700px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #0077cc;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+    .ref-link {
+      margin: 20px 0;
+      padding: 12px 20px;
+      background: #e7f1ff;
+      border: 1px solid #0077cc;
+      border-radius: 5px;
+      font-size: 18px;
+      word-break: break-all;
+      user-select: all;
+    }
+    .note {
+      font-size: 16px;
+      color: #555;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <header>Referral Program</header>
+  <main>
+    <h1>Earn ৳2 for Every Friend You Refer!</h1>
+    <p>
+      Share your unique referral link with friends. When they buy the ebook, you get ৳2 credited as a reward.
+    </p>
+    <p>Your referral link:</p>
+    <div class="ref-link" id="refLink">https://smarteller.netlify.app/?ref=yourname</div>
+    <p class="note">
+      * Replace <code>yourname</code> with your unique ID or username.<br>
+      * Keep sharing and start earning!
+    </p>
+  </main>
+  <script>
+    // Auto fill referral link with URL parameter if present
+    function getReferral() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const ref = urlParams.get('ref');
+      if (ref) {
+        document.getElementById('refLink').textContent = 
+          `https://smarteller.netlify.app/?ref=${ref}`;
+      }
+    }
+    getReferral();
+  </script>
+</body>
+</html>
