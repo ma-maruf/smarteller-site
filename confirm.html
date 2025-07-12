@@ -82,28 +82,17 @@
   </main>
 
   <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const ref = urlParams.get("ref");
+    if (ref) {
+      document.getElementById("ref").value = ref;
+    }
+
     document.getElementById("paymentForm").addEventListener("submit", function(event) {
       event.preventDefault();
-
-      // Just show success message for now
       document.getElementById("message").style.display = "block";
-
-      // TODO: You can connect this form to a backend like Google Forms, Formspree, or Firebase
+      console.log("Referral:", ref);
     });
   </script>
-  <script>
-  const urlParams = new URLSearchParams(window.location.search);
-  const ref = urlParams.get("ref");
-  if (ref) {
-    document.getElementById("ref").value = ref;
-  }
-
-  document.getElementById("paymentForm").addEventListener("submit", function(event) {
-    event.preventDefault();
-    document.getElementById("message").style.display = "block";
-    console.log("Referral:", ref);
-  });
-</script>
-
 </body>
 </html>
