@@ -8,16 +8,19 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f8f9fa;
+      background: #f0f4f8;
       margin: 0;
       padding: 0;
+      color: #333;
     }
     header {
-      background-color: #0077cc;
+      background: #0077cc;
       color: white;
-      text-align: center;
       padding: 20px 0;
-      font-size: 24px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 2px;
     }
     main {
       max-width: 600px;
@@ -28,33 +31,44 @@
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       text-align: center;
     }
+    h1 {
+      color: #0077cc;
+      margin-bottom: 15px;
+    }
     p {
       font-size: 18px;
+      line-height: 1.5;
+      margin-bottom: 30px;
+    }
+    .payment-number {
+      font-weight: bold;
+      font-size: 20px;
       margin-bottom: 20px;
     }
-    .btn {
+    a.buy-btn {
       display: inline-block;
-      background: #28a745;
+      padding: 14px 30px;
+      background: #0077cc;
       color: white;
-      padding: 14px 28px;
       text-decoration: none;
+      font-size: 20px;
       border-radius: 30px;
-      font-size: 18px;
+      transition: background 0.3s ease;
     }
-    .btn:hover {
-      background: #218838;
+    a.buy-btn:hover {
+      background: #005fa3;
     }
   </style>
 </head>
 <body>
-  <header>Buy the Ebook - ৳10</header>
+  <header>Buy the Ebook</header>
   <main>
-    <p>
-      To purchase the ebook, please send ৳10 via bKash or Nagad to our number.<br>
-      <strong>(We’ll display the number here soon.)</strong>
-    </p>
-    <p>After payment, click below to contact us.</p>
-    <a href="#" class="btn">I’ve Paid – Contact Now</a>
+    <h1>Earn Money Online eBook</h1>
+    <p>Price: ৳20</p>
+    <p>Send ৳20 to this number via bKash or Nagad:</p>
+    <p class="payment-number">01775154169</p>
+    <p>After payment, please confirm your payment by clicking the button below.</p>
+    <a href="confirm.html" class="buy-btn">Buy Now / Confirm Payment</a>
   </main>
 </body>
 </html>
