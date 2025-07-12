@@ -14,77 +14,64 @@
       text-align: center;
     }
     header {
-      background-color: #0077cc;
+      position: relative;
+      background: #0077cc;
       color: white;
-      padding: 30px;
-      font-size: 32px;
+      padding: 20px 40px 20px 20px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 2px;
     }
-    header {
-  position: relative;
-  background: #0077cc;
-  color: white;
-  padding: 20px 40px 20px 20px;
-  text-align: center;
-  font-size: 28px;
-  font-weight: bold;
-  letter-spacing: 2px;
-}
-
-/* Hamburger icon style */
-.menu-icon {
-  position: absolute;
-  top: 22px;
-  right: 20px;
-  font-size: 30px;
-  cursor: pointer;
-  user-select: none;
-}
-
-/* Hide menu by default */
-.nav-menu {
-  display: none;
-  position: absolute;
-  top: 60px;
-  right: 20px;
-  background: white;
-  color: #0077cc;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-  padding: 10px 0;
-  width: 160px;
-  text-align: left;
-  z-index: 1000;
-}
-
-/* Show menu when active */
-.nav-menu.active {
-  display: block;
-}
-
-/* Style menu links */
-.nav-menu a {
-  display: block;
-  padding: 10px 20px;
-  color: #0077cc;
-  text-decoration: none;
-  font-weight: 600;
-  border-bottom: 1px solid #ddd;
-}
-
-.nav-menu a:last-child {
-  border-bottom: none;
-}
-
-.nav-menu a:hover {
-  background: #0077cc;
-  color: white;
-}
- 
+    /* Hamburger icon style */
+    .menu-icon {
+      position: absolute;
+      top: 22px;
+      right: 20px;
+      font-size: 30px;
+      cursor: pointer;
+      user-select: none;
+      z-index: 1100;
+    }
+    /* Hide menu by default */
+    .nav-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background: white;
+      color: #0077cc;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      padding: 10px 0;
+      width: 160px;
+      text-align: left;
+      z-index: 1000;
+    }
+    /* Show menu when active */
+    .nav-menu.active {
+      display: block;
+    }
+    /* Style menu links */
+    .nav-menu a {
+      display: block;
+      padding: 10px 20px;
+      color: #0077cc;
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px solid #ddd;
+    }
+    .nav-menu a:last-child {
+      border-bottom: none;
+    }
+    .nav-menu a:hover {
+      background: #0077cc;
+      color: white;
+    }
     main {
       padding: 40px 20px;
     }
-    
-   a.button {
+    a.button {
       display: inline-block;
       margin-top: 30px;
       padding: 15px 25px;
@@ -100,11 +87,36 @@
   </style>
 </head>
 <body>
-  <header>Welcome to Smarteller</header>
+  <header>
+    Welcome to Smarteller
+    <div class="menu-icon" id="menu-icon">&#9776;</div>
+    <nav class="nav-menu" id="nav-menu">
+      <a href="index.html">Home</a>
+      <a href="buy.html">Buy Now</a>
+      <a href="confirm.html">Confirm Payment</a>
+      <!-- Add more links here -->
+    </nav>
+  </header>
   <main>
     <h1>Coming Soon: Earn Money Online eBook</h1>
     <p>Buy our guide to start earning online with your phone or PC.</p>
     <a class="button" href="buy.html">Buy Now – ৳10</a>
   </main>
+
+  <script>
+    const menuIcon = document.getElementById('menu-icon');
+    const navMenu = document.getElementById('nav-menu');
+
+    menuIcon.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+    });
+
+    // Optional: close menu if clicked outside
+    document.addEventListener('click', (e) => {
+      if (!menuIcon.contains(e.target) && !navMenu.contains(e.target)) {
+        navMenu.classList.remove('active');
+      }
+    });
+  </script>
 </body>
 </html>
