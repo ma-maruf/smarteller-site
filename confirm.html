@@ -62,6 +62,8 @@
   <header>Payment Confirmation</header>
   <main>
     <form id="paymentForm">
+      <input type="hidden" id="ref" name="ref" />
+
       <label for="name">Your Name</label>
       <input type="text" id="name" name="name" required />
 
@@ -89,5 +91,19 @@
       // TODO: You can connect this form to a backend like Google Forms, Formspree, or Firebase
     });
   </script>
+  <script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const ref = urlParams.get("ref");
+  if (ref) {
+    document.getElementById("ref").value = ref;
+  }
+
+  document.getElementById("paymentForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    document.getElementById("message").style.display = "block";
+    console.log("Referral:", ref);
+  });
+</script>
+
 </body>
 </html>
