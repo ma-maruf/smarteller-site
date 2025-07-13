@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payment Confirmation - Smarteller</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      padding: 0;
+      margin: 0;
+    }
+    header {
+      background: #0077cc;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      font-size: 24px;
+    }
+    main {
+      max-width: 500px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #0077cc;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+    .message {
+      margin-top: 20px;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header style="display: flex; align-items: center; justify-content: center; background: #0077cc; padding: 20px; color: white;">
+  <img src="logo of smarteller.png" alt="Smarteller Logo" style="
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    object-fit: cover;
+    margin-right: 10px;">
+  <h1 style="margin: 0;">Payment Confirmation</h1>
+</header>
+  <main>
+    <form id="optionForm" style="margin-bottom: 30px;">
+  <label style="font-weight: bold;">Did you already make the payment?</label>
+  <input type="radio" id="yes" name="paymentStatus" value="yes" required>
+  <label for="yes">Yes</label>
+  <input type="radio" id="no" name="paymentStatus" value="no">
+  <label for="no">No</label>
+</form>
+    
+    <form id="paymentForm">
+      <input type="hidden" id="ref" name="ref" />
+
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="number">Your Payment Number  [NAGAD]</label>
+      <input type="text" id="number" name="number" required />
+
+      <label for="trxid">Transaction ID</label>
+      <input type="text" id="trxid" name="trxid" required />
+
+      <label for="screenshot">Upload Screenshot (Optional)</label>
+      <input type="file" id="screenshot" name="screenshot" accept="image/*" />
+
+      <button type="submit">Submit</button>
+      <div class="message" id="message">✅ Your information has been recorded. Thank you!</div>
+    </form>
+  </main>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const ref = urlParams.get("ref");
+    if (ref) {
+      document.getElementById("ref").value = ref;
+    }
+
+    document.getElementById("paymentForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      document.getElementById("message").style.display = "block";
+      console.log("Referral:", ref);
+    });
+  </script>
+</body>
+</html>
