@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Select Payment Method</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    h1 {
+      color: #0077cc;
+    }
+    button {
+      margin: 20px;
+      padding: 14px 28px;
+      font-size: 18px;
+      border: none;
+      border-radius: 30px;
+      background: #0077cc;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Select Payment Method</h1>
+  <button onclick="goToConfirm('Bkash')">Bkash</button>
+  <button onclick="goToConfirm('Nagad')">Nagad</button>
+
+  <script>
+    function goToConfirm(method) {
+      window.location.href = `confirm.html?ref=${method}`;
+    }
+  </script>
+</body>
+</html>
