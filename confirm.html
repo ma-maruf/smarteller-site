@@ -80,32 +80,15 @@
   Bkash
 </div>
   <main>
-    <form id="optionForm" style="margin-bottom: 30px;">
-  <label style="font-weight: bold;">Did you already make the payment?</label>
-  <input type="radio" id="yes" name="paymentStatus" value="yes" required>
-  <label for="yes">Yes</label>
-  <input type="radio" id="no" name="paymentStatus" value="no">
-  <label for="no">No</label>
+   <form method="POST" action="https://sheetdb.io/api/v1/q7unbax4hh0jq">
+  <input type="text" name="name" placeholder="Your Name" required>
+  <input type="text" name="number" placeholder="Payment Number" required>
+  <input type="text" name="trxid" placeholder="Transaction ID" required>
+  <input type="hidden" name="method" id="ref">
+  <input type="file" name="screenshot" accept="image/*">
+  <button type="submit">Submit</button>
 </form>
     
-    <form id="paymentForm">
-      <input type="hidden" id="ref" name="ref" />
-
-      <label for="name">Your Name</label>
-      <input type="text" id="name" name="name" required />
-
-      <label for="number">Your Payment Number  [BKASH]</label>
-      <input type="text" id="number" name="number" required />
-
-      <label for="trxid">Transaction ID</label>
-      <input type="text" id="trxid" name="trxid" required />
-
-      <label for="screenshot">Upload Screenshot (Optional)</label>
-      <input type="file" id="screenshot" name="screenshot" accept="image/*" />
-
-      <button type="submit">Submit</button>
-      <div class="message" id="message">✅ Your information has been recorded. Thank you!</div>
-    </form>
   </main>
 
   <script>
