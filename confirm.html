@@ -99,7 +99,16 @@
       <div class="message" id="message">✅ Your information has been recorded. Thank you!</div>
     </form>
 
-  
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const ref = urlParams.get("ref");
+    if (ref) {
+      document.getElementById("ref").value = ref;
+    }
+  </script>
+
+
+
     
 <script>
   document.getElementById("paymentForm").addEventListener("submit", function(e) {
