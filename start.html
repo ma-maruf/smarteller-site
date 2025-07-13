@@ -34,10 +34,14 @@
   <button onclick="goToConfirm('Bkash')">Bkash</button>
   <button onclick="goToConfirm('Nagad')">Nagad</button>
 
-  <script>
-    function goToConfirm(method) {
-      window.location.href = `confirm.html?ref=${method}`;
+ <script>
+  function goToConfirm(method) {
+    if (method === "Bkash") {
+      window.location.href = "confirm.html?ref=Bkash";
+    } else if (method === "Nagad") {
+      window.location.href = "confirm2.html?ref=Nagad";
     }
-  </script>
+  }
+</script>
 </body>
 </html>
