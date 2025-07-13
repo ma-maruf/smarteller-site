@@ -70,6 +70,14 @@
   <h1 style="margin: 0;">Payment Confirmation</h1>
 </header>
   <main>
+    <form id="optionForm" style="margin-bottom: 30px;">
+  <label style="font-weight: bold;">Did you already make the payment?</label>
+  <input type="radio" id="yes" name="paymentStatus" value="yes" required>
+  <label for="yes">Yes</label>
+  <input type="radio" id="no" name="paymentStatus" value="no">
+  <label for="no">No</label>
+</form>
+    
     <form id="paymentForm">
       <input type="hidden" id="ref" name="ref" />
 
