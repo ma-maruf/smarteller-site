@@ -79,15 +79,26 @@
   font-family: Arial, sans-serif;">
   Bkash
 </div>
-  <main>
-<form id="paymentForm">
-  <input type="text" name="name" required />
-  <input type="text" name="number" required />
-  <input type="text" name="trxid" required />
-  <input type="hidden" name="method" id="ref" />
-  <button type="submit">Submit</button>
-  <div id="message" style="display:none; color:green;">✅ Your information has been recorded.</div>
-</form>
+  <main> 
+    <form id="paymentForm">
+      <input type="hidden" id="ref" name="ref" />
+
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" required />
+
+      <label for="number">Your Payment Number  [NAGAD]</label>
+      <input type="text" id="number" name="number" required />
+
+      <label for="trxid">Transaction ID</label>
+      <input type="text" id="trxid" name="trxid" required />
+
+      <label for="screenshot">Upload Screenshot (Optional)</label>
+      <input type="file" id="screenshot" name="screenshot" accept="image/*" />
+
+      <button type="submit">Submit</button>
+      <div class="message" id="message">✅ Your information has been recorded. Thank you!</div>
+    </form>
+
   
     
 <script>
