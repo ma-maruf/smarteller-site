@@ -80,29 +80,38 @@
   Bkash
 </div>
   <main>
-   <form method="POST" action="https://sheetdb.io/api/v1/q7unbax4hh0jq">
-  <input type="text" name="name" placeholder="Your Name" required>
-  <input type="text" name="number" placeholder="Payment Number" required>
-  <input type="text" name="trxid" placeholder="Transaction ID" required>
-  <input type="hidden" name="method" id="ref">
-  <input type="file" name="screenshot" accept="image/*">
+<form id="paymentForm">
+  <input type="text" name="name" required />
+  <input type="text" name="number" required />
+  <input type="text" name="trxid" required />
+  <input type="hidden" name="method" id="ref" />
   <button type="submit">Submit</button>
+  <div id="message" style="display:none; color:green;">✅ Your information has been recorded.</div>
 </form>
+
+
     
   </main>
+script>
+  document.getElementById("paymentForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const ref = urlParams.get("ref");
-    if (ref) {
-      document.getElementById("ref").value = ref;
-    }
+    const formData = new FormData(this);
 
-    document.getElementById("paymentForm").addEventListener("submit", function(event) {
-      event.preventDefault();
-      document.getElementById("message").style.display = "block";
-      console.log("Referral:", ref);
+    fetch("https://sheetdb.io/api/v1/q7unbax4hh0jq", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.created) {
+        document.getElementById("message").style.display = "block";
+      }
     });
-  </script>
+  });
+</script>
+
+
+ 
 </body>
 </html>
