@@ -4,11 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Smarteller Sign Up</title>
+  <!-- Bootstrap CSS -->
   <link
     href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
     rel="stylesheet"
   />
 </head>
+
 <body class="bg-light">
   <div class="container py-5">
     <div class="row justify-content-center">
@@ -69,34 +71,52 @@
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <!-- Firestore for unique-username checks -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+
   <script>
-    // Replace with your Firebase project settings
+    // TODO: Replace these with your actual Firebase project settings
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_PROJECT.firebaseapp.com",
       projectId: "YOUR_PROJECT_ID"
     };
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
 
-    // Sign-up logic with username
+    // Initialize Auth and Firestore
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+
+    // Sign-up form handler
     document.getElementById("signupForm").addEventListener("submit", async (e) => {
       e.preventDefault();
+
       const username = document.getElementById("username").value.trim();
       const email    = document.getElementById("email").value.trim();
       const pass     = document.getElementById("password").value;
 
       try {
-        // 1. Create user
-        const userCredential = await auth.createUserWithEmailAndPassword(email, pass);
-        const user = userCredential.user;
+        // 1) Check if that username is already taken
+        const userDoc = await db.doc(`usernames/${username}`).get();
+        if (userDoc.exists) {
+          throw new Error("Username is already taken. Please choose another.");
+        }
 
-        // 2. Update profile with username
+        // 2) Create the Auth user
+        const { user } = await auth.createUserWithEmailAndPassword(email, pass);
+
+        // 3) Reserve the username in Firestore
+        await db.doc(`usernames/${username}`).set({
+          uid: user.uid,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // 4) Update the user’s displayName
         await user.updateProfile({ displayName: username });
 
-        alert("Account created successfully!");
-        // 3. Redirect to login or dashboard
+        alert("Account created successfully! Welcome, " + username + ".");
         location.href = "login.html";
+
       } catch (err) {
         alert(err.message);
       }
