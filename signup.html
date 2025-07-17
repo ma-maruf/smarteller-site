@@ -19,6 +19,17 @@
             
             <form id="signupForm">
               <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input
+                  type="text"
+                  id="username"
+                  class="form-control"
+                  placeholder="Choose a username"
+                  required
+                />
+              </div>
+              
+              <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
                 <input
                   type="email"
@@ -59,7 +70,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
   <script>
-    // TODO: Replace with your Firebase project settings
+    // Replace with your Firebase project settings
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -68,20 +79,27 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // Sign-up logic
-    document.getElementById("signupForm").addEventListener("submit", (e) => {
+    // Sign-up logic with username
+    document.getElementById("signupForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const email = document.getElementById("email").value;
-      const pass  = document.getElementById("password").value;
+      const username = document.getElementById("username").value.trim();
+      const email    = document.getElementById("email").value.trim();
+      const pass     = document.getElementById("password").value;
 
-      auth.createUserWithEmailAndPassword(email, pass)
-        .then(() => {
-          alert("Account created successfully!");
-          location.href = "login.html";
-        })
-        .catch((err) => {
-          alert(err.message);
-        });
+      try {
+        // 1. Create user
+        const userCredential = await auth.createUserWithEmailAndPassword(email, pass);
+        const user = userCredential.user;
+
+        // 2. Update profile with username
+        await user.updateProfile({ displayName: username });
+
+        alert("Account created successfully!");
+        // 3. Redirect to login or dashboard
+        location.href = "login.html";
+      } catch (err) {
+        alert(err.message);
+      }
     });
   </script>
 </body>
