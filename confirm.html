@@ -119,10 +119,10 @@
     })
     .then(response => response.json())
     .then(data => {
-      if (data.created) {
-        document.getElementById("message").style.display = "block";
-      }
-    });
+  if (data.created) {
+    window.location.href = "pending.html";
+  }
+});
   });
 </script>
     <script>
