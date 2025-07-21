@@ -8,15 +8,24 @@
     body {
       font-family: Arial, sans-serif;
       background: #f8fafc;
-      padding: 0;
       margin: 0;
+      padding: 0;
     }
     header {
       background: #0077cc;
       color: white;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
-      font-size: 24px;
+    }
+    header img {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      object-fit: cover;
+      margin-right: 10px;
     }
     main {
       max-width: 500px;
@@ -28,16 +37,15 @@
     }
     label {
       display: block;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-weight: bold;
     }
-    input[type="text"],
-    input[type="file"] {
+    input[type="text"] {
       width: 100%;
       padding: 10px;
       margin-bottom: 20px;
-      border-radius: 5px;
       border: 1px solid #ccc;
+      border-radius: 5px;
     }
     button {
       background: #0077cc;
@@ -47,93 +55,92 @@
       border-radius: 30px;
       font-size: 16px;
       cursor: pointer;
+      width: 100%;
     }
     button:hover {
       background: #005fa3;
     }
-    .message {
-      margin-top: 20px;
-      color: green;
-      display: none;
-    }
   </style>
 </head>
-<body>
-  
-  <header style="display: flex; align-items: center; justify-content: center; background: #0077cc; padding: 20px; color: white;">
-  <img src="logo of smarteller.png" alt="Smarteller Logo" style="
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    object-fit: cover;
-    margin-right: 10px;">
-  <h1 style="margin: 0;">Payment Confirmation</h1>
-</header>
-  <div style="
-  text-align: center;
-  font-size: 40px;
-  font-weight: bold;
-  color: #e91e63;
-  margin: 30px auto 10px;
-  font-family: Arial, sans-serif;">
-  Bkash
-</div>
-  <main> 
-    <form id="paymentForm">
-      <input type="hidden" id="ref" name="method" />
 
+<body>
+  <header>
+    <img src="logo of smarteller.png" alt="Smarteller Logo" />
+    <h1>Payment Confirmation</h1>
+  </header>
+
+  <main>
+    <form id="paymentForm">
       <label for="name">Your Name</label>
       <input type="text" id="name" name="name" required />
 
-      <label for="number">Your Payment Number  [BKASH]</label>
+      <label for="number">Your Bkash Number</label>
       <input type="text" id="number" name="number" required />
 
       <label for="trxid">Transaction ID</label>
       <input type="text" id="trxid" name="trxid" required />
 
-      <button type="submit">Submit</button>
-      <div class="message" id="message">✅ Your information has been recorded. Thank you!</div>
+      <button type="submit">Submit Payment</button>
     </form>
-
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const ref = urlParams.get("ref");
-    if (ref) {
-      document.getElementById("ref").value = ref;
-    }
-  </script>
-
-
-
-    
-<script>
-  document.getElementById("paymentForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(this);
-
-    fetch("https://sheetdb.io/api/v1/q7unbax4hh0jq", {
-      method: "POST",
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-  if (data.created) {
-    window.location.href = "pending.html";
-  }
-});
-  });
-</script>
-    <script>
-  const urlParams = new URLSearchParams(window.location.search);
-  const ref = urlParams.get("ref");
-  if (ref) {
-    document.getElementById("ref").value = ref;
-  }
-</script>
   </main>
 
- 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBzRctAdMx3n9g4xsW33guxk81EoMzyrOE",
+      authDomain: "smarteller.firebaseapp.com",
+      projectId: "smarteller"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+    const db   = firebase.firestore();
+
+    // Redirect to login if not authenticated
+    auth.onAuthStateChanged(user => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
+
+    document.getElementById("paymentForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (!user) return;
+
+      // Collect form data
+      const name   = document.getElementById("name").value.trim();
+      const number = document.getElementById("number").value.trim();
+      const trxid  = document.getElementById("trxid").value.trim();
+      const buyerUid = user.uid;
+
+      try {
+        // Look up who referred this user
+        const userSnap = await db.doc(`users/${buyerUid}`).get();
+        const referredBy = userSnap.exists ? userSnap.data().referredBy : null;
+
+        // Write purchase record
+        await db.collection("purchases").add({
+          buyerUid,
+          name,
+          number,
+          trxid,
+          amount: 100,
+          referredBy: referredBy || null,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // Redirect to pending confirmation page
+        window.location.href = "pending.html";
+      } catch (err) {
+        alert("Error submitting payment: " + err.message);
+      }
+    });
+  </script>
 </body>
 </html>
