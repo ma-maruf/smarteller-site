@@ -53,11 +53,9 @@
                 />
               </div>
               
-              <button type="submit" class="btn btn-primary w-100">
-                Sign Up
-              </button>
+              <button type="submit" class="btn btn-primary w-100">Sign Up</button>
             </form>
-            
+
             <p class="text-center mt-3">
               Already have an account?
               <a href="login.html">Log in</a>
@@ -71,54 +69,56 @@
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-  <!-- Firestore for unique-username checks -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
 
   <script>
-    // TODO: Replace these with your actual Firebase project settings
+    // Replace with your Firebase project config
     const firebaseConfig = {
       apiKey: "YOUR_API_KEY",
       authDomain: "YOUR_PROJECT.firebaseapp.com",
       projectId: "YOUR_PROJECT_ID"
     };
-    firebase.initializeApp(firebaseConfig);
 
-    // Initialize Auth and Firestore
+    firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // Sign-up form handler
     document.getElementById("signupForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const username = document.getElementById("username").value.trim();
       const email    = document.getElementById("email").value.trim();
-      const pass     = document.getElementById("password").value;
+      const password = document.getElementById("password").value;
 
       try {
-        // 1) Check if that username is already taken
-        const userDoc = await db.doc(`usernames/${username}`).get();
-        if (userDoc.exists) {
-          throw new Error("Username is already taken. Please choose another.");
+        // Check if username is taken
+        const usernameRef = db.doc(`usernames/${username}`);
+        const snapshot = await usernameRef.get();
+        if (snapshot.exists) {
+          alert("❌ Username already taken. Try a different one.");
+          return;
         }
 
-        // 2) Create the Auth user
-        const { user } = await auth.createUserWithEmailAndPassword(email, pass);
+        // Create user
+        const { user } = await auth.createUserWithEmailAndPassword(email, password);
 
-        // 3) Reserve the username in Firestore
-        await db.doc(`usernames/${username}`).set({
+        // Reserve the username
+        await usernameRef.set({
           uid: user.uid,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // 4) Update the user’s displayName
+        // Update display name
         await user.updateProfile({ displayName: username });
 
-        alert("Account created successfully! Welcome, " + username + ".");
+        // Send email verification
+        await user.sendEmailVerification();
+
+        alert("✅ Signup successful! Check your email to verify your account.");
         location.href = "login.html";
 
-      } catch (err) {
-        alert(err.message);
+      } catch (error) {
+        alert("⚠️ " + error.message);
       }
     });
   </script>
