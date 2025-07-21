@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,10 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Smarteller Sign Up</title>
   <!-- Bootstrap CSS -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 
 <body class="bg-light">
@@ -22,43 +20,21 @@
             <form id="signupForm">
               <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
-                <input
-                  type="text"
-                  id="username"
-                  class="form-control"
-                  placeholder="Choose a username"
-                  required
-                />
+                <input type="text" id="username" class="form-control" placeholder="Choose a username" required />
               </div>
-              
               <div class="mb-3">
                 <label for="email" class="form-label">Email address</label>
-                <input
-                  type="email"
-                  id="email"
-                  class="form-control"
-                  placeholder="you@example.com"
-                  required
-                />
+                <input type="email" id="email" class="form-control" placeholder="you@example.com" required />
               </div>
-              
               <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
-                <input
-                  type="password"
-                  id="password"
-                  class="form-control"
-                  placeholder="••••••••"
-                  required
-                />
+                <input type="password" id="password" class="form-control" placeholder="••••••••" required />
               </div>
-              
               <button type="submit" class="btn btn-primary w-100">Sign Up</button>
             </form>
 
             <p class="text-center mt-3">
-              Already have an account?
-              <a href="login.html">Log in</a>
+              Already have an account? <a href="login.html">Log in</a>
             </p>
           </div>
         </div>
@@ -72,13 +48,10 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
 
   <script>
-    // Replace with your Firebase project config
     const firebaseConfig = {
-      apiKey: "
-AIzaSyBzRctAdMx3n9g4xsW33guxk81EoMzyrOE",
+      apiKey: "YOUR_API_KEY",
       authDomain: "smarteller.firebaseapp.com",
-      projectId: "
-smarteller"
+      projectId: "smarteller"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -93,32 +66,25 @@ smarteller"
       const password = document.getElementById("password").value;
 
       try {
-        // Check if username is taken
         const usernameRef = db.doc(`usernames/${username}`);
         const snapshot = await usernameRef.get();
         if (snapshot.exists) {
-          alert("❌ Username already taken. Try a different one.");
+          alert("❌ Username already taken. Please choose a different one.");
           return;
         }
 
-        // Create user
         const { user } = await auth.createUserWithEmailAndPassword(email, password);
 
-        // Reserve the username
         await usernameRef.set({
           uid: user.uid,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // Update display name
         await user.updateProfile({ displayName: username });
-
-        // Send email verification
         await user.sendEmailVerification();
 
-        alert("✅ Signup successful! Check your email to verify your account.");
+        alert("✅ Signup successful! Please check your email to verify your account.");
         location.href = "login.html";
-
       } catch (error) {
         alert("⚠️ " + error.message);
       }
