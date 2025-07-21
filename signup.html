@@ -73,27 +73,25 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
 
   <script>
-    // 1. Insert your Firebase config here
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID"
+      apiKey: "AIzaSyBzRctAdMx3n9g4xsW33guxk81EoMzyrOE",
+      authDomain: "smarteller.firebaseapp.com",
+      projectId: "smarteller"
     };
     firebase.initializeApp(firebaseConfig);
 
     const auth = firebase.auth();
     const db   = firebase.firestore();
 
-    // 2. Read referral code from URL, if any
+    // Read referral code from URL (e.g. signup.html?ref=abc123)
     const urlParams    = new URLSearchParams(window.location.search);
-    const refCodeParam = urlParams.get("ref");  // e.g. signup.html?ref=abc123
+    const refCodeParam = urlParams.get("ref");
 
-    // 3. Helper: generate a 6-character referral code
+    // Generate a 6-character referral code
     function makeReferralCode() {
       return Math.random().toString(36).substring(2, 8);
     }
 
-    // 4. Sign-up form handler
     document.getElementById("signupForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
@@ -102,26 +100,25 @@
       const password = document.getElementById("password").value;
 
       try {
-        // 4a. Ensure username is unique
+        // Check username uniqueness
         const nameRef = db.doc(`usernames/${username}`);
-        const nameSnap = await nameRef.get();
-        if (nameSnap.exists) {
+        if ((await nameRef.get()).exists) {
           throw new Error("Username already taken. Please choose another.");
         }
 
-        // 4b. Create the Auth user
+        // Create Auth user
         const { user } = await auth.createUserWithEmailAndPassword(email, password);
 
-        // 4c. Reserve that username
+        // Reserve the username
         await nameRef.set({
           uid: user.uid,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // 4d. Generate this user’s own referral code
+        // Generate this user’s referral code
         const myRefCode = makeReferralCode();
 
-        // 4e. Lookup who referred them (if any)
+        // Look up who referred them (if any)
         let referredBy = null;
         if (refCodeParam) {
           const refQuery = await db
@@ -130,11 +127,11 @@
             .limit(1)
             .get();
           if (!refQuery.empty) {
-            referredBy = refQuery.docs[0].id;  // UID of the referrer
+            referredBy = refQuery.docs[0].id;
           }
         }
 
-        // 4f. Store user profile + referral info
+        // Store profile + referral info
         await db.doc(`users/${user.uid}`).set({
           displayName:    username,
           email:          user.email,
@@ -144,13 +141,12 @@
           createdAt:      firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        // 4g. Update displayName in Auth & send email verification
+        // Update displayName & send email verification
         await user.updateProfile({ displayName: username });
         await user.sendEmailVerification();
 
         alert("✅ Signup successful! Please check your email to verify your account.");
         location.href = "login.html";
-
       } catch (err) {
         alert("⚠️ " + err.message);
       }
