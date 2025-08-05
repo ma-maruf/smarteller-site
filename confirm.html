@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,61 +85,37 @@
     </form>
   </main>
 
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
-
   <script>
-    // Initialize Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyBzRctAdMx3n9g4xsW33guxk81EoMzyrOE",
-      authDomain: "smarteller.firebaseapp.com",
-      projectId: "smarteller"
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    const auth = firebase.auth();
-    const db   = firebase.firestore();
-
-    // Redirect to login if not authenticated
-    auth.onAuthStateChanged(user => {
-      if (!user) {
-        window.location.href = "login.html";
-      }
-    });
-
     document.getElementById("paymentForm").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const user = auth.currentUser;
-      if (!user) return;
 
-      // Collect form data
       const name   = document.getElementById("name").value.trim();
       const number = document.getElementById("number").value.trim();
       const trxid  = document.getElementById("trxid").value.trim();
-      const buyerUid = user.uid;
 
       try {
-        // Look up who referred this user
-        const userSnap = await db.doc(`users/${buyerUid}`).get();
-        const referredBy = userSnap.exists ? userSnap.data().referredBy : null;
-
-        // Write purchase record
-        await db.collection("purchases").add({
-          buyerUid,
-          name,
-          number,
-          trxid,
-          amount: 100,
-          referredBy: referredBy || null,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        const response = await fetch("https://sheetdb.io/api/v1/018vsogjla4ir", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            data: [
+              {
+                name: name,
+                number: number,
+                trxid: trxid,
+                timestamp: new Date().toISOString()
+              }
+            ]
+          })
         });
 
-        // Redirect to pending confirmation page
-        window.location.href = "pending.html";
+        if (response.ok) {
+          window.location.href = "pending.html";
+        } else {
+          alert("Error submitting payment. Please try again.");
+        }
       } catch (err) {
-        alert("Error submitting payment: " + err.message);
+        alert("Network error: " + err.message);
       }
     });
   </script>
